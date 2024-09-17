@@ -1,0 +1,1008 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Purchasing department</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  <!-- Favicons -->
+  <link href="assets/img/favicon.png" rel="icon">
+  <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Jost:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="assets/vendor/aos/aos.css" rel="stylesheet">
+  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+  <link href="assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+  <link href="assets/vendor/remixicon/remixicon.css" rel="stylesheet">
+  <link href="assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+
+  <!-- Template Main CSS File -->
+  <link href="assets/css/style.css" rel="stylesheet">
+
+  <!-- Chatbot CSS -->
+  <style>
+    #chatbox {
+      position: fixed;
+      bottom: 0;
+      right: 0;
+      max-width: 400px;
+      width: 100%;
+      height: 400px;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      display: none; /* Initialement caché */
+      background: #ffffff;
+      z-index: 1000;
+    }
+    #messages {
+      height: calc(100% - 60px);
+      overflow-y: auto;
+      padding: 10px;
+      background: #f9f9f9;
+    }
+    .message {
+      margin-bottom: 10px;
+    }
+    .message.user {
+      text-align: right;
+    }
+    .message.bot {
+      text-align: left;
+    }
+    #chatbox-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #47b2e4;
+      color: #ffffff;
+      padding: 10px;
+      border-top-left-radius: 10px;
+      border-top-right-radius: 10px;
+    }
+    #chatbox-toggle {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #47b2e4;
+      color: #ffffff;
+      border: none;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      cursor: pointer;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      z-index: 1000;
+    }
+    #chatbox-toggle:hover {
+      background: #0056b3;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ======= Header ======= -->
+  <header id="header" class="fixed-top ">
+    <div class="container d-flex align-items-center">
+
+<h1 class="logo me-auto">
+  <a href="index.html">
+    <img src="assets/img/LOGO.png" alt="DISTRA Logo" style="max-height: 30px;">
+  </a>
+</h1>
+
+      <nav id="navbar" class="navbar">
+        <ul>
+          <li><a class="nav-link scrollto active" href="#hero">Home</a></li>
+          <li><a class="nav-link scrollto" href="#skills">À propos</a></li>
+          <li><a class="nav-link scrollto" href="#services">Ressources</a></li>
+          <li><a class="nav-link scrollto" href="#faq">FAQ</a></li>
+          <li><a class="getstarted scrollto" href="https://teams.microsoft.com/l/team/19%3AcHt0fkRfEw3AME9dBlI7tQnVqcBwdADnihemZ5ekvQw1%40thread.tacv2/conversations?groupId=51533f45-9589-460d-a97c-416753846f9a&tenantId=9f4147f9-943d-439c-b586-8c4dc6ba20e6" target="_blank">Teams Achat</a></li>
+        </ul>
+        <i class="bi bi-list mobile-nav-toggle"></i>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Chatbot Section -->
+  <div id="chatbox">
+    <div id="chatbox-header">
+      <span>Chatbot DISTRA</span>
+      <button id="chatbox-close" class="btn btn-light btn-sm">X</button>
+    </div>
+    <div id="messages" class="card-body">
+      <!-- Messages apparaissent ici -->
+    </div>
+    <div class="card-footer">
+      <div class="input-group">
+        <input id="user-input" type="text" class="form-control" placeholder="Entrez votre message...">
+        <div class="input-group-append">
+          <button id="send-btn" class="btn btn-primary">Envoyer</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Chatbot Toggle Button -->
+  <button id="chatbox-toggle" class="btn btn-primary">💬</button>
+
+  <!-- Scripts Bootstrap -->
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+  <!-- Script pour le chatbot -->
+  <script>
+    // Afficher / masquer la boîte de dialogue
+    document.getElementById('chatbox-toggle').addEventListener('click', () => {
+      const chatbox = document.getElementById('chatbox');
+      chatbox.style.display = chatbox.style.display === 'none' || chatbox.style.display === '' ? 'block' : 'none';
+    });
+
+    // Fermer la boîte de dialogue
+    document.getElementById('chatbox-close').addEventListener('click', () => {
+      document.getElementById('chatbox').style.display = 'none';
+    });
+
+    document.getElementById('send-btn').addEventListener('click', async () => {
+      const userInput = document.getElementById('user-input').value;
+      if (!userInput) return;
+
+      // Afficher le message utilisateur
+      addMessage('user', userInput);
+      document.getElementById('user-input').value = '';
+
+      // Envoyer la demande à l'API OpenAI
+      const response = await fetch('https://api.openai.com/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer sk-proj-v9JMf8ktpkF6ldwBF8tNT3BlbkFJ0RlyG6aI10xunISE5j7P` // Remplacez YOUR_API_KEY par votre clé API
+        },
+        body: JSON.stringify({
+          model: "gpt-3.5-turbo",
+          messages: [{role: "user", content: userInput}]
+        })
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        const botMessage = data.choices[0].message.content;
+
+        // Afficher le message du bot
+        addMessage('bot', botMessage);
+      } else {
+        console.error('Erreur:', response.statusText);
+      }
+    });
+
+    function addMessage(sender, text) {
+      const messageContainer = document.getElementById('messages');
+      const messageElement = document.createElement('div');
+      messageElement.classList.add('message', sender);
+      messageElement.innerText = text;
+      messageContainer.appendChild(messageElement);
+      messageContainer.scrollTop = messageContainer.scrollHeight;
+    }
+  </script>
+</body>
+
+
+
+  <!-- ======= Hero Section ======= -->
+  <section id="hero" class="d-flex align-items-center">
+
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-6 d-flex flex-column justify-content-center pt-4 pt-lg-0 order-2 order-lg-1" data-aos="fade-up" data-aos-delay="200">
+          <h1>Bienvenue sur l'intranet du département achat.</h1>
+          <h2>Nous sommes une équipe d'acheteurs professionnels pour le groupe Distra - Mutandis.</h2>
+          <div class="d-flex justify-content-center justify-content-lg-start">
+         
+            <a href="https://www.youtube.com/watch?v=Z8Md5M0ZbRg" class="glightbox btn-watch-video"><i class="bi bi-play-circle"></i><span>Regarder la vidéo</span></a>
+          </div>
+        </div>
+        <div class="col-lg-6 order-1 order-lg-2 hero-img" data-aos="zoom-in" data-aos-delay="200">
+          <img src="assets/img/hero-img.png" class="img-fluid animated" alt="">
+        </div>
+      </div>
+    </div>
+
+  </section><!-- End Hero -->
+
+  <main id="main">
+
+  <!-- ======= Cliens Section ======= -->
+<section id="cliens" class="cliens section-bg">
+  <div class="container">
+    <div class="row justify-content-center" data-aos="zoom-in">
+      <div class="col-lg-2 col-md-4 col-6 d-flex align-items-center justify-content-center">
+        <img src="assets/img/clients/client-1.png" class="img-fluid" alt="">
+      </div>
+      <div class="col-lg-2 col-md-4 col-6 d-flex align-items-center justify-content-center">
+        <img src="assets/img/clients/client-2.png" class="img-fluid" alt="">
+      </div>
+      <div class="col-lg-2 col-md-4 col-6 d-flex align-items-center justify-content-center">
+        <img src="assets/img/clients/client-3.png" class="img-fluid" alt="">
+      </div>
+      <div class="col-lg-2 col-md-4 col-6 d-flex align-items-center justify-content-center">
+        <img src="assets/img/clients/client-4.png" class="img-fluid" alt="">
+      </div>
+      <div class="col-lg-2 col-md-4 col-6 d-flex align-items-center justify-content-center">
+        <img src="assets/img/clients/client-5.png" class="img-fluid" alt="">
+      </div>
+    </div>
+  </div>
+</section><!-- End Cliens Section -->
+
+
+<!-- ======= Skills Section ======= -->
+<section id="skills" class="skills">
+  <div class="container" data-aos="fade-up">
+
+    <div class="row">
+      <div class="col-lg-6 d-flex align-items-center" data-aos="fade-right" data-aos-delay="100">
+        <img src="assets/img/skills.png" class="img-fluid" alt="">
+      </div>
+      <div class="col-lg-6 pt-4 pt-lg-0 content" data-aos="fade-left" data-aos-delay="100">
+        <div class="section-title">
+          <h2>À propos</h2>
+        </div>
+
+        <ul style="text-align: justify;">
+          <li><i class="ri-check-double-line"></i> Les achats occupent une place centrale dans notre entreprise industrielle, représentant plus de 50% du chiffre d'affaires global, influençant directement la marge bénéficiaire ainsi que la qualité du service. Une gestion optimale des achats est donc essentielle pour réduire les coûts, améliorer les performances et garantir la satisfaction de nos clients.</li>
+          <li><i class="ri-check-double-line"></i> Nous sommes une équipe de 7 personnes chargée de gérer les achats de matières premières, matériaux d'emballage, achats administratifs, immobilisations, logistique et les pièces de rechange. Engagés dans des pratiques éthiques et innovantes afin d'accompagner DISTRA dans sa croissance.</li>
+          <li><i class="ri-check-double-line"></i> Notre capacité à anticiper les tendances du marché et à répondre rapidement aux besoins changeants de l'industrie renforce la compétitivité globale de l'entreprise.</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</section>
+<!-- End Skills Section -->
+
+<style>
+  .section-title {
+    text-align: center;
+    margin-bottom: 10px; /* Réduit l'espace sous le titre */
+  }
+
+  .section-title h2 {
+    font-size: 28px; /* Ajustez la taille de la police si nécessaire */
+    margin-bottom: 10px; /* Réduit l'espace sous le titre */
+  }
+
+  .content ul {
+    padding-left: 20px; /* Ajustez le padding pour la liste */
+    margin-top: 0; /* Réduit l'espace au-dessus des listes */
+    margin-bottom: 0; /* Réduit l'espace en dessous des listes */
+  }
+
+  .content ul li {
+    margin-bottom: 10px; /* Ajuste l'espace entre les éléments de la liste */
+  }
+</style>
+
+<!-- ======= Cta Section ======= -->
+<section id="cta" class="cta">
+  <div class="container" data-aos="zoom-in">
+    <div class="row text-center justify-content-around">
+      <div class="col-lg-2">
+        <h3><strong><span class="counter" data-count="540">0</span> MDHS</strong></h3>
+        <p>Chiffre d'affaire achat</p>
+      </div>
+      <div class="col-lg-2">
+        <h3><strong><span class="counter" data-count="400">0</span></strong></h3>
+        <p>NBR de FRS</p>
+      </div>
+      <div class="col-lg-2">
+        <h3><strong><span class="counter" data-count="97">0</span>%</strong></h3>
+        <p>Taux de service</p>
+      </div>
+      <div class="col-lg-2">
+        <h3><strong><span class="counter" data-count="65">0</span> MDHS</strong></h3>
+        <p>Gains nets</p>
+      </div>
+      <div class="col-lg-2">
+        <h3><strong><span class="counter" data-count="4">0</span> Activités</strong></h3>
+        <p>Jus, Déterg, Eau, Cos</p>
+      </div>
+    </div>
+  </div>
+</section><!-- End Cta Section -->
+
+<style>
+  .cta {
+    padding: 80px 0; /* Augmente la hauteur de la section */
+  }
+
+  .cta h3 {
+    font-size: 2rem;
+    margin-bottom: 15px; /* Augmente l'espace sous le titre */
+  }
+
+  .cta p {
+    margin-bottom: 0;
+  }
+
+  .cta .note {
+    margin-top: 20px;
+    font-size: 0.9rem;
+    color: white;
+    font-weight: bold;
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var counters = document.querySelectorAll('.counter');
+
+    function animateCounters() {
+      counters.forEach(function(counter) {
+        var updateCount = function() {
+          var target = +counter.getAttribute('data-count');
+          var count = +counter.innerText;
+          var speed = target / 200; // Change this value for faster/slower animation
+          
+          if (count < target) {
+            counter.innerText = Math.ceil(count + speed);
+            setTimeout(updateCount, 10);
+          } else {
+            counter.innerText = target;
+          }
+        };
+        updateCount();
+      });
+    }
+
+    function isScrolledIntoView(el) {
+      var rect = el.getBoundingClientRect();
+      return rect.top >= 0 && rect.bottom <= window.innerHeight;
+    }
+
+    function onScroll() {
+      if (isScrolledIntoView(document.getElementById('cta'))) {
+        animateCounters();
+        window.removeEventListener('scroll', onScroll);
+      }
+    }
+
+    window.addEventListener('scroll', onScroll);
+    // Check if already in view on load
+    if (isScrolledIntoView(document.getElementById('cta'))) {
+      animateCounters();
+      window.removeEventListener('scroll', onScroll);
+    }
+  });
+</script>
+
+
+    <!-- ======= About Us Section ======= 
+    <section id="about" class="about">
+      <div class="container" data-aos="fade-up">
+
+        <div class="section-title">
+          <h2>À propos</h2>
+        </div>
+
+        <div class="row content">
+          <div class="col-lg-6">
+            <p>
+Les achats occupent une place centrale dans notre entreprise industrielle, représentant plus de 50% du chiffre d'affaires global, influençant directement la marge bénéficiaire ainsi que la qualité du service. Une gestion optimale des achats est donc essentielle pour réduire les coûts, améliorer les performances et garantir la satisfaction de nos clients. 
+Notre capacité à anticiper les tendances du marché et à répondre rapidement aux besoins changeants de l'industrie renforce la compétitivité globale de l'entreprise.
+            </p>
+            <ul>
+              <li><i class="ri-check-double-line"></i> Gestion des achats pour 4 activités : détergents, jus, eau et cosmétiques
+</li>
+              <li><i class="ri-check-double-line"></i> Réseau de plus de 800 fournisseurs</li>
+              <li><i class="ri-check-double-line"></i> Chiffre d'affaires de plus de 2,7 milliards de dirhams depuis la création</li>
+            </ul>
+          </div>
+          <div class="col-lg-6 pt-4 pt-lg-0">
+            <p>
+              Nous sommes une équipe de six personnes chargée de gérer les achats de matières premières, matériaux d'emballage, achats administratifs, immobilisations, logistique et les pièces de rechange. Engagés dans des pratiques éthiques et innovantes afin d'accompagner DISTRA dans sa croissance.
+            </p>
+            <!--<a href="#" class="btn-learn-more">Learn More</a>-->
+          </div>
+        </div>
+
+      </div>
+    </section><!-- End About Us Section -->
+
+
+<!-- ======= Services Section ======= -->
+<section id="services" class="services section-bg">
+  <div class="container-fluid" data-aos="fade-up">
+
+    <div class="section-title">
+      <h2>Ressources clés</h2>
+      <p>Découvrez nos plateformes intégrées pour optimiser chaque étape du processus d'achat. Utilisez nos outils de visualisation et reporting, de suivi de projets et de gestion de contrats pour une gestion proactive et transparente.</p>
+    </div>
+
+    <div class="row justify-content-center">
+      <div class="col-lg-2 col-md-6 d-flex align-items-stretch" data-aos="zoom-in" data-aos-delay="100">
+        <div class="icon-box">
+          <div class="icon"><i class="bx bxl-dribbble"></i></div>
+          <h4><a href="https://distramorocco-my.sharepoint.com/:x:/g/personal/e_kari_distra-mutandis_com/Eala5ZOBpGdJtuyJoDwDCO8BlRDvFuKwojdL6PesvP8HPA?e=cOwizF">Consultations des acheteurs</a></h4>
+          <p>Accédez en temps réel aux consultations des acheteurs.</p>
+        </div>
+      </div>
+
+      <div class="col-lg-2 col-md-6 d-flex align-items-stretch mt-4 mt-md-0" data-aos="zoom-in" data-aos-delay="200">
+        <div class="icon-box">
+          <div class="icon"><i class="bx bx-file"></i></div>
+          <h4><a href="https://achatdistra.monday.com/boards/1502139267" target="_blank">Homologations MPME</a></h4>
+          <p>Utilisez l'outil Monday pour gérer efficacement les dossiers d'homologations.</p>
+        </div>
+      </div>
+
+      <div class="col-lg-2 col-md-6 d-flex align-items-stretch mt-4 mt-md-0" data-aos="zoom-in" data-aos-delay="300">
+        <div class="icon-box">
+          <div class="icon"><i class="bx bx-layer"></i></div>
+          <h4><a href="https://achatdistra.monday.com/boards/1507366455" target="_blank">Contrats cadre</a></h4>
+          <p>Optimisez la gestion de vos contrats avec l'outil Monday.</p>
+        </div>
+      </div>
+
+      <div class="col-lg-2 col-md-6 d-flex align-items-stretch mt-4 mt-md-0" data-aos="zoom-in" data-aos-delay="400">
+        <div class="icon-box">
+          <div class="icon"><i class="bx bx-tachometer"></i></div>
+          <h4><a href="https://app.powerbi.com/view?r=eyJrIjoiNjVkZWFhM2QtM2VhNS00ODg0LTlkZTEtYzU5YjNiODZhMGRhIiwidCI6ImI5YmUzYzYyLWJmODMtNGY2OC1iMDY4LTkxN2JkZDc0MDE5MiJ9" target="_blank">Dashboards PowerBI</a></h4>
+          <p>Accédez à nos dashboards dynamiques pour suivre en temps réel les performances de nos achats.</p>
+        </div>
+      </div>
+
+      <div class="col-lg-2 col-md-6 d-flex align-items-stretch mt-4 mt-md-0" data-aos="zoom-in" data-aos-delay="500">
+        <div class="icon-box">
+          <div class="icon"><i class="bx bx-bar-chart"></i></div>
+          <h4><a href="https://distramorocco-my.sharepoint.com/:f:/g/personal/e_kari_distra-mutandis_com/EnqLRkHh2QhHqmjWk17xWFoBqhO5MFsviUhJwzOqUWvV1g?e=jnmMXB" target="_blank">Reporting mensuels</a></h4>
+          <p>Visualisez et analysez les reportings mensuels pour prendre des décisions éclairées.</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+<!-- End Services Section -->
+
+
+    <!-- ======= Why Us Section ======= -->
+    <section id="why-us" class="why-us section-bg">
+      <div class="container-fluid" data-aos="fade-up">
+
+        <div class="row">
+
+          <div class="col-lg-7 d-flex flex-column justify-content-center align-items-stretch  order-2 order-lg-1">
+
+            <!--<div class="content">
+              <h3>Ressources Clés pour <strong>la Gestion des Achats</strong></h3>
+              <p>
+                Explorez nos outils essentiels pour une gestion proactive et efficace des achats. Accédez aux visuels validés, aux reportings mensuels stratégiques, et aux fichiers Excel cruciaux pour optimiser vos décisions d'achat.
+              </p>
+            </div>-->
+
+            <div class="accordion-list">
+              <ul>
+                <li>
+                  <a data-bs-toggle="collapse" class="collapse" data-bs-target="#accordion-list-1" class="collapsed"><span>01</span> Visuels JUS <i class="bx bx-chevron-down icon-show"></i><i class="bx bx-chevron-up icon-close"></i></a>
+                  <div id="accordion-list-1" class="collapse show" data-bs-parent=".accordion-list">
+                    <p>
+                      Veuillez trouver ci-dessous les derniers visuels validés des différentes gammes de jus.
+                    </p>
+</br>
+<a href="https://distramorocco-my.sharepoint.com/:f:/r/personal/o_guessous_distra-mutandis_com/Documents/Ex%C3%A9%20packs%20jus%20Marrakech?csf=1&web=1&e=5tkUzt" "target="_blank" class="btn-learn-more">Click Here</a>
+
+                  </div>
+                </li>
+                <li>
+                  <a data-bs-toggle="collapse" data-bs-target="#accordion-list-2"><span>02</span> Divers fichiers de base <i class="bx bx-chevron-down icon-show"></i><i class="bx bx-chevron-up icon-close"></i></a>
+                  <div id="accordion-list-2" class="collapse" data-bs-parent=".accordion-list">
+                    <p>
+                      Veuillez trouver ci-dessous des fichiers Excel présentant les CMUP et les budgets.</p>
+</br>
+<a href="https://distramorocco-my.sharepoint.com/:f:/r/personal/o_guessous_distra-mutandis_com/Documents/Ex%C3%A9%20packs%20jus%20Marrakech?csf=1&web=1&e=5tkUzt" "target="_blank" class="btn-learn-more">Click Here</a>
+
+                  </div>
+                </li>
+
+                <li>
+                  <a data-bs-toggle="collapse" data-bs-target="#accordion-list-3" class="collapsed"><span>03</span>Fichiers sources pour Power BI<i class="bx bx-chevron-down icon-show"></i><i class="bx bx-chevron-up icon-close"></i></a>
+                  <div id="accordion-list-3" class="collapse" data-bs-parent=".accordion-list">
+                    <p>
+                      Veuillez trouver ci-dessous les fichiers sources pour Power BI ainsi que l'application VBA pour l'évaluation des fournisseurs.
+                    </p>
+</br>
+<a href="https://distramorocco-my.sharepoint.com/:f:/g/personal/e_kari_distra-mutandis_com/EkF-eI1F2yBGp9gPpDpWWvEBQxwq_busa3HTkXUg7j6eTw?e=F3dFnz" "target="_blank" class="btn-learn-more">Click Here</a>
+                  </div>
+
+
+                 <li>
+                  <a data-bs-toggle="collapse" data-bs-target="#accordion-list-4" class="collapsed"><span>04</span>Automatisation<i class="bx bx-chevron-down icon-show"></i><i class="bx bx-chevron-up icon-close"></i></a>
+                  <div id="accordion-list-4" class="collapse" data-bs-parent=".accordion-list">
+<p>
+    Nous avons mis en place des systèmes de notification automatique par email pour alerter l'équipe des événements suivants :
+</p>
+<ul>
+    <li><strong>Augmentation de prix</strong> : Ce système de notification automatique informe l'acheteur dès qu'une augmentation de prix par rapport au précédent achat est détectée.</li>
+<li><strong>Dépassement de budget</strong> : Notification automatique lorsqu'un article dépasse le budget alloué.</li>
+<li><strong>Suivi mensuelle des fournisseurs</strong> : Suivi automatique de la conformité des livraisons, alertant l'équipe de toute non conformité.</li>
+<li><strong>Suivi des contrats</strong> : Suivi automatique des contrats, alertant l'équipe de toute déviation par rapport aux termes convenus.</li>
+
+    <li><strong>Dossiers d'homologation</strong> : Une notification par email est envoyée à tous les intervenants (Qualité, Marketing, acheteurs) dès qu'un dossier est créé.
+ Si le statut du dossier reste en cours, une notification est envoyée à l'intervenant responsable du blocage du dossier.</li>
+    </li>
+</ul>
+
+</br>
+<a href="https://distramorocco-my.sharepoint.com/:f:/g/personal/e_kari_distra-mutandis_com/Erssfr8HQf9Dh-CfYNwcrDsB4p6sqIjKlfNZgpiFPzLETw?e=OFaaCK" "target="_blank" class="btn-learn-more">Click Here</a>
+                  </div>
+
+                </li> 
+
+              </ul>
+            </div>
+
+          </div>
+
+          <div class="col-lg-5 align-items-stretch order-1 order-lg-2 img" style='background-image: url("assets/img/why-us.png");' data-aos="zoom-in" data-aos-delay="150">&nbsp;</div>
+        </div>
+
+      </div>
+    </section><!-- End Why Us Section -->
+
+  
+    <!-- ======= Cta Section ======= 
+    <section id="cta" class="cta">
+      <div class="container" data-aos="zoom-in">
+
+        <div class="row">
+          <div class="col-lg-9 text-center text-lg-start">
+            <h3>L'Art de l'Achat Intelligent</h3>
+            <p> " Un achat intelligent ne consiste pas seulement à obtenir le prix le plus bas, mais à obtenir la meilleure valeur."</p>
+          </div>
+          <div class="col-lg-3 cta-btn-container text-center">
+            <a class="cta-btn align-middle" href="https://sievo.com/resources/ai-in-procurement#:~:text=the%20full%20experience.-,Use%20of%20AI%20in%20procurement,contract%20management%20and%20strategic%20sourcing.">AI IN PROCUREMENT</a>
+          </div>
+        </div>
+
+      </div>
+    </section><!-- End Cta Section -->
+
+    <!-- ======= Portfolio Section ======= 
+    <section id="portfolio" class="portfolio">
+      <div class="container" data-aos="fade-up">
+
+        <div class="section-title">
+          <h2>Portfolio</h2>
+          <p>Magnam dolores commodi suscipit. Necessitatibus eius consequatur ex aliquid fuga eum quidem. Sit sint consectetur velit. Quisquam quos quisquam cupiditate. Et nemo qui impedit suscipit alias ea. Quia fugiat sit in iste officiis commodi quidem hic quas.</p>
+        </div>
+
+        <ul id="portfolio-flters" class="d-flex justify-content-center" data-aos="fade-up" data-aos-delay="100">
+          <li data-filter="*" class="filter-active">All</li>
+          <li data-filter=".filter-app">App</li>
+          <li data-filter=".filter-card">Card</li>
+          <li data-filter=".filter-web">Web</li>
+        </ul>
+
+        <div class="row portfolio-container" data-aos="fade-up" data-aos-delay="200">
+
+          <div class="col-lg-4 col-md-6 portfolio-item filter-app">
+            <div class="portfolio-img"><img src="assets/img/portfolio/portfolio-1.jpg" class="img-fluid" alt=""></div>
+            <div class="portfolio-info">
+              <h4>App 1</h4>
+              <p>App</p>
+              <a href="assets/img/portfolio/portfolio-1.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox preview-link" title="App 1"><i class="bx bx-plus"></i></a>
+              <a href="portfolio-details.html" class="details-link" title="More Details"><i class="bx bx-link"></i></a>
+            </div>
+          </div>
+
+          <div class="col-lg-4 col-md-6 portfolio-item filter-web">
+            <div class="portfolio-img"><img src="assets/img/portfolio/portfolio-2.jpg" class="img-fluid" alt=""></div>
+            <div class="portfolio-info">
+              <h4>Web 3</h4>
+              <p>Web</p>
+              <a href="assets/img/portfolio/portfolio-2.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox preview-link" title="Web 3"><i class="bx bx-plus"></i></a>
+              <a href="portfolio-details.html" class="details-link" title="More Details"><i class="bx bx-link"></i></a>
+            </div>
+          </div>
+
+          <div class="col-lg-4 col-md-6 portfolio-item filter-app">
+            <div class="portfolio-img"><img src="assets/img/portfolio/portfolio-3.jpg" class="img-fluid" alt=""></div>
+            <div class="portfolio-info">
+              <h4>App 2</h4>
+              <p>App</p>
+              <a href="assets/img/portfolio/portfolio-3.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox preview-link" title="App 2"><i class="bx bx-plus"></i></a>
+              <a href="portfolio-details.html" class="details-link" title="More Details"><i class="bx bx-link"></i></a>
+            </div>
+          </div>
+
+          <div class="col-lg-4 col-md-6 portfolio-item filter-card">
+            <div class="portfolio-img"><img src="assets/img/portfolio/portfolio-4.jpg" class="img-fluid" alt=""></div>
+            <div class="portfolio-info">
+              <h4>Card 2</h4>
+              <p>Card</p>
+              <a href="assets/img/portfolio/portfolio-4.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox preview-link" title="Card 2"><i class="bx bx-plus"></i></a>
+              <a href="portfolio-details.html" class="details-link" title="More Details"><i class="bx bx-link"></i></a>
+            </div>
+          </div>
+
+          <div class="col-lg-4 col-md-6 portfolio-item filter-web">
+            <div class="portfolio-img"><img src="assets/img/portfolio/portfolio-5.jpg" class="img-fluid" alt=""></div>
+            <div class="portfolio-info">
+              <h4>Web 2</h4>
+              <p>Web</p>
+              <a href="assets/img/portfolio/portfolio-5.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox preview-link" title="Web 2"><i class="bx bx-plus"></i></a>
+              <a href="portfolio-details.html" class="details-link" title="More Details"><i class="bx bx-link"></i></a>
+            </div>
+          </div>
+
+          <div class="col-lg-4 col-md-6 portfolio-item filter-app">
+            <div class="portfolio-img"><img src="assets/img/portfolio/portfolio-6.jpg" class="img-fluid" alt=""></div>
+            <div class="portfolio-info">
+              <h4>App 3</h4>
+              <p>App</p>
+              <a href="assets/img/portfolio/portfolio-6.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox preview-link" title="App 3"><i class="bx bx-plus"></i></a>
+              <a href="portfolio-details.html" class="details-link" title="More Details"><i class="bx bx-link"></i></a>
+            </div>
+          </div>
+
+          <div class="col-lg-4 col-md-6 portfolio-item filter-card">
+            <div class="portfolio-img"><img src="assets/img/portfolio/portfolio-7.jpg" class="img-fluid" alt=""></div>
+            <div class="portfolio-info">
+              <h4>Card 1</h4>
+              <p>Card</p>
+              <a href="assets/img/portfolio/portfolio-7.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox preview-link" title="Card 1"><i class="bx bx-plus"></i></a>
+              <a href="portfolio-details.html" class="details-link" title="More Details"><i class="bx bx-link"></i></a>
+            </div>
+          </div>
+
+          <div class="col-lg-4 col-md-6 portfolio-item filter-card">
+            <div class="portfolio-img"><img src="assets/img/portfolio/portfolio-8.jpg" class="img-fluid" alt=""></div>
+            <div class="portfolio-info">
+              <h4>Card 3</h4>
+              <p>Card</p>
+              <a href="assets/img/portfolio/portfolio-8.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox preview-link" title="Card 3"><i class="bx bx-plus"></i></a>
+              <a href="portfolio-details.html" class="details-link" title="More Details"><i class="bx bx-link"></i></a>
+            </div>
+          </div>
+
+          <div class="col-lg-4 col-md-6 portfolio-item filter-web">
+            <div class="portfolio-img"><img src="assets/img/portfolio/portfolio-9.jpg" class="img-fluid" alt=""></div>
+            <div class="portfolio-info">
+              <h4>Web 3</h4>
+              <p>Web</p>
+              <a href="assets/img/portfolio/portfolio-9.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox preview-link" title="Web 3"><i class="bx bx-plus"></i></a>
+              <a href="portfolio-details.html" class="details-link" title="More Details"><i class="bx bx-link"></i></a>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section><!-- End Portfolio Section -->
+
+    <!-- ======= Team Section ======= 
+    <section id="team" class="team section-bg">
+      <div class="container" data-aos="fade-up">
+
+        <div class="section-title">
+          <h2>Team</h2>
+          <p>Magnam dolores commodi suscipit. Necessitatibus eius consequatur ex aliquid fuga eum quidem. Sit sint consectetur velit. Quisquam quos quisquam cupiditate. Et nemo qui impedit suscipit alias ea. Quia fugiat sit in iste officiis commodi quidem hic quas.</p>
+        </div>
+
+        <div class="row">
+
+          <div class="col-lg-6">
+            <div class="member d-flex align-items-start" data-aos="zoom-in" data-aos-delay="100">
+              <div class="pic"><img src="assets/img/team/team-1.jpg" class="img-fluid" alt=""></div>
+              <div class="member-info">
+                <h4>Walter White</h4>
+                <span>Chief Executive Officer</span>
+                <p>Explicabo voluptatem mollitia et repellat qui dolorum quasi</p>
+                <div class="social">
+                  <a href=""><i class="ri-twitter-fill"></i></a>
+                  <a href=""><i class="ri-facebook-fill"></i></a>
+                  <a href=""><i class="ri-instagram-fill"></i></a>
+                  <a href=""> <i class="ri-linkedin-box-fill"></i> </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-6 mt-4 mt-lg-0">
+            <div class="member d-flex align-items-start" data-aos="zoom-in" data-aos-delay="200">
+              <div class="pic"><img src="assets/img/team/team-2.jpg" class="img-fluid" alt=""></div>
+              <div class="member-info">
+                <h4>Sarah Jhonson</h4>
+                <span>Product Manager</span>
+                <p>Aut maiores voluptates amet et quis praesentium qui senda para</p>
+                <div class="social">
+                  <a href=""><i class="ri-twitter-fill"></i></a>
+                  <a href=""><i class="ri-facebook-fill"></i></a>
+                  <a href=""><i class="ri-instagram-fill"></i></a>
+                  <a href=""> <i class="ri-linkedin-box-fill"></i> </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-6 mt-4">
+            <div class="member d-flex align-items-start" data-aos="zoom-in" data-aos-delay="300">
+              <div class="pic"><img src="assets/img/team/team-3.jpg" class="img-fluid" alt=""></div>
+              <div class="member-info">
+                <h4>William Anderson</h4>
+                <span>CTO</span>
+                <p>Quisquam facilis cum velit laborum corrupti fuga rerum quia</p>
+                <div class="social">
+                  <a href=""><i class="ri-twitter-fill"></i></a>
+                  <a href=""><i class="ri-facebook-fill"></i></a>
+                  <a href=""><i class="ri-instagram-fill"></i></a>
+                  <a href=""> <i class="ri-linkedin-box-fill"></i> </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-6 mt-4">
+            <div class="member d-flex align-items-start" data-aos="zoom-in" data-aos-delay="400">
+              <div class="pic"><img src="assets/img/team/team-4.jpg" class="img-fluid" alt=""></div>
+              <div class="member-info">
+                <h4>Amanda Jepson</h4>
+                <span>Accountant</span>
+                <p>Dolorum tempora officiis odit laborum officiis et et accusamus</p>
+                <div class="social">
+                  <a href=""><i class="ri-twitter-fill"></i></a>
+                  <a href=""><i class="ri-facebook-fill"></i></a>
+                  <a href=""><i class="ri-instagram-fill"></i></a>
+                  <a href=""> <i class="ri-linkedin-box-fill"></i> </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section><!-- End Team Section -->
+
+    <!-- ======= Pricing Section ======= 
+    <section id="pricing" class="pricing">
+      <div class="container" data-aos="fade-up">
+
+        <div class="section-title">
+          <h2>Pricing</h2>
+          <p>Magnam dolores commodi suscipit. Necessitatibus eius consequatur ex aliquid fuga eum quidem. Sit sint consectetur velit. Quisquam quos quisquam cupiditate. Et nemo qui impedit suscipit alias ea. Quia fugiat sit in iste officiis commodi quidem hic quas.</p>
+        </div>
+
+        <div class="row">
+
+          <div class="col-lg-4" data-aos="fade-up" data-aos-delay="100">
+            <div class="box">
+              <h3>Free Plan</h3>
+              <h4><sup>$</sup>0<span>per month</span></h4>
+              <ul>
+                <li><i class="bx bx-check"></i> Quam adipiscing vitae proin</li>
+                <li><i class="bx bx-check"></i> Nec feugiat nisl pretium</li>
+                <li><i class="bx bx-check"></i> Nulla at volutpat diam uteera</li>
+                <li class="na"><i class="bx bx-x"></i> <span>Pharetra massa massa ultricies</span></li>
+                <li class="na"><i class="bx bx-x"></i> <span>Massa ultricies mi quis hendrerit</span></li>
+              </ul>
+              <a href="#" class="buy-btn">Get Started</a>
+            </div>
+          </div>
+
+          <div class="col-lg-4 mt-4 mt-lg-0" data-aos="fade-up" data-aos-delay="200">
+            <div class="box featured">
+              <h3>Business Plan</h3>
+              <h4><sup>$</sup>29<span>per month</span></h4>
+              <ul>
+                <li><i class="bx bx-check"></i> Quam adipiscing vitae proin</li>
+                <li><i class="bx bx-check"></i> Nec feugiat nisl pretium</li>
+                <li><i class="bx bx-check"></i> Nulla at volutpat diam uteera</li>
+                <li><i class="bx bx-check"></i> Pharetra massa massa ultricies</li>
+                <li><i class="bx bx-check"></i> Massa ultricies mi quis hendrerit</li>
+              </ul>
+              <a href="#" class="buy-btn">Get Started</a>
+            </div>
+          </div>
+
+          <div class="col-lg-4 mt-4 mt-lg-0" data-aos="fade-up" data-aos-delay="300">
+            <div class="box">
+              <h3>Developer Plan</h3>
+              <h4><sup>$</sup>49<span>per month</span></h4>
+              <ul>
+                <li><i class="bx bx-check"></i> Quam adipiscing vitae proin</li>
+                <li><i class="bx bx-check"></i> Nec feugiat nisl pretium</li>
+                <li><i class="bx bx-check"></i> Nulla at volutpat diam uteera</li>
+                <li><i class="bx bx-check"></i> Pharetra massa massa ultricies</li>
+                <li><i class="bx bx-check"></i> Massa ultricies mi quis hendrerit</li>
+              </ul>
+              <a href="#" class="buy-btn">Get Started</a>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section><!-- End Pricing Section -->
+
+    <!-- ======= Frequently Asked Questions Section ======= -->
+    <section id="faq" class="faq section-bg">
+      <div class="container" data-aos="fade-up">
+
+        <div class="section-title">
+          <h2>Foire aux questions</h2>
+          <p>Cette section a été conçue pour vous fournir des réponses claires sur nos processus d'achat et d'homologation, comment nous évaluons et nous menons l'enquête de satisfaction des fournisseurs, Vous y trouverez également des descriptions détaillées, les critères utilisés et les meilleures pratiques en matière de gestion des relations avec nos partenaires.</p>
+        </div>
+
+        <div class="faq-list">
+          <ul>
+            <li data-aos="fade-up" data-aos-delay="100">
+              <i class="bx bx-help-circle icon-help"></i> <a data-bs-toggle="collapse" class="collapse" data-bs-target="#faq-list-1">Quelle est la procédure pour effectuer des achats chez Distra ? <i class="bx bx-chevron-down icon-show"></i><i class="bx bx-chevron-up icon-close"></i></a>
+              <div id="faq-list-1" class="collapse show" data-bs-parent=".faq-list">
+                <p>
+                  La procédure d'achat est essentielle pour assurer la transparence et l’efficacité, en garantissant une utilisation optimale des ressources et la conformité aux réglementations et nomes internes.
+                </p>
+
+</br>
+<a href="https://distramorocco-my.sharepoint.com/:b:/g/personal/e_kari_distra-mutandis_com/EVoqI3KV6FBPil9rm1_gs_EBubVQs3WiVmVqIx0kD77e3Q?e=9UlfaW" "target="_blank" class="btn-learn-more">Click Here</a>
+
+              </div>
+            </li>
+
+
+<li data-aos="fade-up" data-aos-delay="200">
+              <i class="bx bx-help-circle icon-help"></i> <a data-bs-toggle="collapse" data-bs-target="#faq-list-2" class="collapsed">Quelle est la procédure d'homologations des MP et ME ? <i class="bx bx-chevron-down icon-show"></i><i class="bx bx-chevron-up icon-close"></i></a>
+              <div id="faq-list-2" class="collapse" data-bs-parent=".faq-list">
+                <p>
+Pour homologuer une nouvelle MP ou ME, nous suivons plusieurs étapes. Cela commence par l'initiation du Besoin / changement, en passant par des tests en laboratoire et des tests industriels, jusqu'à l'archivage des dossiers d'homologation et la passation des commandes. C'est tout un processus où plusieurs parties prenantes collaborent, y compris les acheteurs, le département R&D et le marketing...
+                </p>
+
+</br>
+<a href="https://distramorocco-my.sharepoint.com/:b:/g/personal/e_kari_distra-mutandis_com/EYhPfW53GC1CiZgJgVMI5xYBx3a1r8VuN2OgzPLJxrJi0g?e=CJHoOM" "target="_blank" class="btn-learn-more">Click Here</a>
+              </div>
+            </li>
+
+
+<li data-aos="fade-up" data-aos-delay="300">
+              <i class="bx bx-help-circle icon-help"></i> <a data-bs-toggle="collapse" data-bs-target="#faq-list-3" class="collapsed">Comment évaluons-nous nos fournisseurs ? <i class="bx bx-chevron-down icon-show"></i><i class="bx bx-chevron-up icon-close"></i></a>
+              <div id="faq-list-3" class="collapse" data-bs-parent=".faq-list">
+<p>Chez DISTRA, nous évaluons nos fournisseurs mensuellement et annuellement selon des critères spécifiques :</p>
+
+<p><strong>Évaluation Mensuelle :</strong></p>
+<p>
+    Les fournisseurs sont évalués chaque mois sur trois critères principaux : la quantité, le délai et la qualité. Un quatrième critère, la modalité de paiement, a été ajouté pour une évaluation plus complète.
+</p>
+
+<p><strong>Évaluation Annuelle :</strong></p>
+<p>
+    L'évaluation annuelle est réalisée de manière collaborative par nos acheteurs, notre équipe d'approvisionnement et notre service qualité. Une application VBA est utilisée pour noter sur 3 points les critères prédéfinis. Chaque département remplit les notes qui les concernent.
+</p>
+
+<p>
+    Après la consolidation des notes, nous partageons les résultats avec les fournisseurs via un e-mail détaillant leurs performances de l’année écoulée, accompagné d'une lettre d'évaluation.
+</p>
+</br>
+<a href="https://distramorocco-my.sharepoint.com/:f:/r/personal/o_guessous_distra-mutandis_com/Documents/Ex%C3%A9%20packs%20jus%20Marrakech?csf=1&web=1&e=5tkUzt" "target="_blank" class="btn-learn-more">Click Here</a>
+
+              </div>
+            </li>
+
+
+            <li data-aos="fade-up" data-aos-delay="400">
+              <i class="bx bx-help-circle icon-help"></i> <a data-bs-toggle="collapse" data-bs-target="#faq-list-4" class="collapsed">Enquête de satisfaction des fournisseurs<i class="bx bx-chevron-down icon-show"></i><i class="bx bx-chevron-up icon-close"></i></a>
+              <div id="faq-list-4" class="collapse" data-bs-parent=".faq-list">
+                <p>
+                  Afin d'améliorer notre collaboration avec nos fournisseurs, nous menons une enquête de satisfaction. Cette enquête est principalement adressée aux fournisseurs de classe A et à certains de classe B. Elle comporte des questions sur l'optimisation de nos achats, la facilitation de la communication et l'évaluation du respect des échéances de paiement. les réponses nous aideront à renforcer notre partenariat a long termes avec eux et à améliorer nos processus d'achat.
+                </p>
+
+</br>
+<a href="https://forms.office.com/Pages/ResponsePage.aspx?id=-UdBnz2UnEO1hoxNxrog5mf2-6BUSIFKiHEnIo8eCq9URUNNTEpJSEZOSTE3Q1pKN1BOOUtBQUo4SS4u" "target="_blank" class="btn-learn-more">Click Here</a>
+              </div>
+            </li>
+
+          </ul>
+        </div>
+
+      </div>
+    </section><!-- End Frequently Asked Questions Section -->
+
+  
+  <!-- ======= Footer ======= -->
+  <footer id="footer">
+
+
+    <div class="footer-top">
+      <div class="container">
+        <div class="row">
+
+          <div class="col-lg-3 col-md-6 footer-contact">
+<h1 class="logo me-auto">
+  <a href="index.html">
+    <img src="assets/img/LOGO1.png" alt="DISTRA Logo" style="max-height: 30px;">
+  </a>
+</h1>
+            <p>
+              Rue almariniyine <br>
+              Berrechid, 26100<br>
+              Morocoo <br><br>
+              <strong>Phone:</strong> +212 667724039<br>
+              <strong>Email:</strong> e.kari@distra-mutandis.com<br>
+            </p>
+          </div>
+
+          <div class="col-lg-3 col-md-6 footer-links">
+            <h4>Useful Links</h4>
+            <ul>
+              <li><i class="bx bx-chevron-right"></i> <a href="#">Home</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="#about">About us</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="#Services">Services</a></li>
+
+            </ul>
+          </div>
+
+
+
+          <div class="col-lg-3 col-md-6 footer-links">
+            <h4>Our Social Networks</h4>
+            <div class="social-links mt-3">
+              <a href="https://mutandis.com/" class="twitter"><i class="bx bxl-twitter"></i></a>
+              <a href="https://mutandis.com/" class="facebook"><i class="bx bxl-facebook"></i></a>
+              <a href="https://mutandis.com/" class="instagram"><i class="bx bxl-instagram"></i></a>
+              <a href="https://mutandis.com/" class="google-plus"><i class="bx bxl-skype"></i></a>
+              <a href="https://www.linkedin.com/company/mutandisgroup/mycompany/" class="linkedin"><i class="bx bxl-linkedin"></i></a>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="container footer-bottom clearfix">
+      <div class="copyright">
+        &copy; Copyright <strong><span>DISTRA</span></strong>. All Rights Reserved
+      </div>
+      <div class="credits">
+        <!-- All the links in the footer should remain intact. -->
+        <!-- You can delete the links only if you purchased the pro version. -->
+        <!-- Licensing information: https://bootstrapmade.com/license/ -->
+        <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/arsha-free-bootstrap-html-template-corporate/ -->
+        Designed by <a href="https://mutandis.com/">Purchasing department</a>
+      </div>
+
+    
+    
+    </div>
+  </footer><!-- End Footer -->
+
+  <div id="preloader"></div>
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+  <!-- Vendor JS Files -->
+  <script src="assets/vendor/aos/aos.js"></script>
+  <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="assets/vendor/glightbox/js/glightbox.min.js"></script>
+  <script src="assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
+  <script src="assets/vendor/php-email-form/validate.js"></script>
+  <script src="assets/vendor/swiper/swiper-bundle.min.js"></script>
+  <script src="assets/vendor/waypoints/noframework.waypoints.js"></script>
+
+  <!-- Template Main JS File -->
+  <script src="assets/js/main.js"></script>
+
+</body>
+
+</html>
